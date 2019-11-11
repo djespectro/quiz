@@ -1,15 +1,22 @@
 FROM alpine:latest
 
-RUN apk add --update openjdk8-jre
-
 ARG CONTEXT_DIR=/dir_name
 
 WORKDIR /opt
 
-ADD ./$CONTEXT_DIR ./app.jar
+RUN apk add --update openjdk8-jre
+
+RUN addgroup -S runner -g 433 && \
+    adduser -u 431 -S -g runner -h /opt -s /sbin/nologin runner
 
 RUN echo -e "#!/usr/bin/env sh\njava -jar app.jar" > run.sh
 
-EXPOSE 3306
+EXPOSE 8080
+
+ADD ./$CONTEXT_DIR ./app.jar
+
+RUN chown -R runner:runner /opt
+
+USER runner
 
 CMD ["sh","run.sh"]
