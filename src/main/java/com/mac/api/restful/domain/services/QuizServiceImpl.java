@@ -1,7 +1,7 @@
 package com.mac.api.restful.domain.services;
 
 import com.mac.api.restful.domain.entity.CloudProvider;
-import com.mac.api.restful.domain.entity.QuizEntity;
+import com.mac.api.restful.domain.entity.Quiz;
 import com.mac.api.restful.repository.QuizRepository;
 import com.mac.api.restful.web.model.QuizDto;
 import lombok.extern.slf4j.Slf4j;
@@ -25,19 +25,19 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public QuizDto addQuiz(String provider) {
         CloudProvider cloudProvider = CloudProvider.getValue(provider);
-        QuizEntity quizEntity = new QuizEntity();
-        quizEntity.setCloudProvider(cloudProvider);
-        return mapEntityToDto(repository.save(quizEntity));
+        Quiz quiz = new Quiz();
+        quiz.setCloudProvider(cloudProvider);
+        return mapEntityToDto(repository.save(quiz));
     }
 
     @Override
     public List<QuizDto> getQuiz() {
         List<QuizDto> dtoList = new ArrayList<>();
 
-        Iterable<QuizEntity> quizEntities = repository.findAll();
+        Iterable<Quiz> quizzes = repository.findAll();
 
         List<CloudProvider> tempQuizDtos = new ArrayList<>();
-        quizEntities.forEach(quizEntity -> tempQuizDtos.add(quizEntity.getCloudProvider()));
+        quizzes.forEach(quiz -> tempQuizDtos.add(quiz.getCloudProvider()));
 
         Long awsCount = tempQuizDtos.stream().filter(provider -> CloudProvider.AWS == provider).count();
         long azureCount = tempQuizDtos.stream().filter(provider -> CloudProvider.AZURE == provider).count();
@@ -50,10 +50,10 @@ public class QuizServiceImpl implements QuizService {
         return dtoList;
     }
 
-    private QuizDto mapEntityToDto(QuizEntity entity) {
-        log.debug(entity.toString());
+    private QuizDto mapEntityToDto(Quiz quiz) {
+        log.debug(quiz.toString());
         QuizDto dto = new QuizDto();
-        dto.setProvider(entity.getCloudProvider());
+        dto.setProvider(quiz.getCloudProvider());
         return dto;
     }
 
