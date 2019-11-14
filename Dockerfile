@@ -6,6 +6,8 @@ WORKDIR /opt
 
 RUN apk add --update openjdk8-jre
 
+RUN export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 RUN addgroup -S runner -g 433 && \
     adduser -u 431 -S -g runner -h /opt -s /sbin/nologin runner
 

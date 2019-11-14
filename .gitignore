@@ -35,3 +35,6 @@ mvnw
 mvnw.cmd
 .mvn
 .DS_Store
+/djespectro-quiz-h2.tar.gz
+/docker-mysql.env
+/mysql.env
